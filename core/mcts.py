@@ -37,7 +37,7 @@ class Node:
         return max(self.children, key=lambda child: child.visits)
 
 
-def mcts_move(game: Othello, iterations: int) -> tuple[int, int]:
+def mcts_move(game: Othello, iterations: int, nsims: int) -> tuple[int, int]:
     """Returns the best move for the current player using Monte Carlo Tree Search."""
 
     root = Node(-1, -1, game.state, game.get_valid_moves(), None)  # root node has no position
@@ -59,21 +59,23 @@ def mcts_move(game: Othello, iterations: int) -> tuple[int, int]:
                 simulation.make_move(x, y)
                 node = node.add_child(x, y, player, simulation.get_valid_moves())
 
-        # simulate
-        while simulation.state in (State.BLACK_TURN, State.WHITE_TURN):
-            moves = simulation.get_valid_moves()
-            x, y = moves[random.randint(0, len(moves) - 1)]
-            simulation.make_move(x, y)  # play a random move
+        #TODO: nsmis 
+        for _ in range(nsims):
+            # simulate
+            while simulation.state in (State.BLACK_TURN, State.WHITE_TURN):
+                moves = simulation.get_valid_moves()
+                x, y = moves[random.randint(0, len(moves) - 1)]
+                simulation.make_move(x, y)  # play a random move
 
-        # backpropagate
-        winner = simulation.state
-        while node is not None:
-            node.visits += 1
-            if winner == State.BLACK_WON and node.player == State.BLACK_TURN or winner == State.WHITE_WON and node.player == State.WHITE_TURN:
-                node.wins += 1
-            elif winner == State.WHITE_WON and node.player == State.BLACK_TURN or winner == State.BLACK_WON and node.player == State.WHITE_TURN:
-                node.wins -= 1
-            node = node.parent
+            # backpropagate
+            winner = simulation.state
+            while node is not None:
+                node.visits += 1
+                if winner == State.BLACK_WON and node.player == State.BLACK_TURN or winner == State.WHITE_WON and node.player == State.WHITE_TURN:
+                    node.wins += 1
+                elif winner == State.WHITE_WON and node.player == State.BLACK_TURN or winner == State.BLACK_WON and node.player == State.WHITE_TURN:
+                    node.wins -= 1
+                node = node.parent
 
     return root.get_most_visited().position
 

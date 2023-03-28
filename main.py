@@ -15,7 +15,7 @@ def main():
         print_board(game.board)
         print_score(game)
         try:
-            x, y = mcts_move(game, 10) if game.state == State.WHITE_TURN else _random_move(game)
+            x, y = mcts_move(game, 10, 20) if game.state == State.WHITE_TURN else _random_move(game)
             print_turn(game)
             print(f"move: {chr(ord('A') + x)}{str(y + 1)}")
             game.make_move(x, y)

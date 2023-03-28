@@ -57,7 +57,7 @@ def minimax_vs_random():
         if games >= limit:
             break
 
-    print(f"BLACK AI: {black_wins}")
+    print(f"BLACK Minimax AI: {black_wins}")
     print(f"WHITE Random: {white_wins}")
     print(f"Draws: {draws}\n")
 
@@ -86,7 +86,7 @@ def minimax_vs_random():
             break
 
     print(f"BLACK Random: {black_wins}")
-    print(f"WHITE AI: {white_wins}")
+    print(f"WHITE Minimax AI: {white_wins}")
     print(f"Draws: {draws}\n")
 
     end = time.time()
@@ -97,7 +97,8 @@ def mcts_vs_random():
     start = time.time()
 
     limit = 10
-    iterations = 100
+    iterations = 10
+    nsims = 50
 
     games = 0
     black_wins = 0
@@ -107,7 +108,7 @@ def mcts_vs_random():
         game = Othello()
         while game.state == State.BLACK_TURN or game.state == State.WHITE_TURN:
             # print_board(game.board)
-            x, y = mcts_move(game, iterations) if game.state == State.BLACK_TURN else _random_move(game)
+            x, y = mcts_move(game, iterations, nsims) if game.state == State.BLACK_TURN else _random_move(game)
             game.make_move(x, y)
 
         if game.state == State.BLACK_WON:
@@ -123,7 +124,7 @@ def mcts_vs_random():
         if games >= limit:
             break
 
-    print(f"BLACK AI: {black_wins}")
+    print(f"BLACK MCTS AI: {black_wins}")
     print(f"WHITE Random: {white_wins}")
     print(f"Draws: {draws}\n")
 
@@ -135,7 +136,7 @@ def mcts_vs_random():
         game = Othello()
         while game.state == State.BLACK_TURN or game.state == State.WHITE_TURN:
             # print_board(game.board)
-            x, y = mcts_move(game, iterations) if game.state == State.WHITE_TURN else _random_move(game)
+            x, y = mcts_move(game, iterations, nsims) if game.state == State.WHITE_TURN else _random_move(game)
             game.make_move(x, y)
 
         if game.state == State.BLACK_WON:
@@ -152,7 +153,7 @@ def mcts_vs_random():
             break
 
     print(f"BLACK Random: {black_wins}")
-    print(f"WHITE AI: {white_wins}")
+    print(f"WHITE MCTS AI: {white_wins}")
     print(f"Draws: {draws}\n")
 
     end = time.time()
@@ -164,6 +165,7 @@ def mcts_vs_minimax():
 
     limit = 10
     iterations = 10
+    nsims = 50
     depth = 1
 
     games = 0
@@ -174,7 +176,7 @@ def mcts_vs_minimax():
         game = Othello()
         while game.state == State.BLACK_TURN or game.state == State.WHITE_TURN:
             # print_board(game.board)
-            x, y = mcts_move(game, iterations) if game.state == State.BLACK_TURN else minimax_move(game, depth)
+            x, y = mcts_move(game, iterations, nsims) if game.state == State.BLACK_TURN else minimax_move(game, depth)
             game.make_move(x, y)
 
         if game.state == State.BLACK_WON:
@@ -202,7 +204,7 @@ def mcts_vs_minimax():
         game = Othello()
         while game.state == State.BLACK_TURN or game.state == State.WHITE_TURN:
             # print_board(game.board)
-            x, y = mcts_move(game, iterations) if game.state == State.WHITE_TURN else minimax_move(game, depth)
+            x, y = mcts_move(game, iterations, nsims) if game.state == State.WHITE_TURN else minimax_move(game, depth)
             game.make_move(x, y)
 
         if game.state == State.BLACK_WON:
@@ -227,6 +229,6 @@ def mcts_vs_minimax():
 
 
 mcts_vs_minimax()
-# mcts_vs_random()
-# minimax_vs_random()
-# performance_test()
+#mcts_vs_random()
+#minimax_vs_random()
+#performance_test()
