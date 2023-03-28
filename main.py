@@ -1,6 +1,6 @@
 from core.othello import Othello, State
 from core.ui import print_board, user_move, print_score, print_turn
-from core.mcts import _random_move
+from core.mcts import _random_move, mcts_move
 from core.minimax import minimax_move
 
 
@@ -15,7 +15,7 @@ def main():
         print_board(game.board)
         print_score(game)
         try:
-            x, y = minimax_move(game, 4) if game.state == State.WHITE_TURN else _random_move(game)
+            x, y = mcts_move(game, 10) if game.state == State.WHITE_TURN else _random_move(game)
             print_turn(game)
             print(f"move: {chr(ord('A') + x)}{str(y + 1)}")
             game.make_move(x, y)
