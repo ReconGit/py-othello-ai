@@ -105,10 +105,10 @@ class Othello:
 
     def _flipped_cells_in_direction(self, x, y, dx, dy, player, opponent) -> list[tuple[int, int]]:
         flipped = []
-        x, y = x + dx, y + dy
-        while 0 <= x <= 7 and 0 <= y <= 7 and self.board[y][x] == opponent:
-            flipped.append((x, y))
-            x, y = x + dx, y + dy
-        if not (0 <= x <= 7 and 0 <= y <= 7) or self.board[y][x] != player:
-            return []
-        return flipped
+        x, y = x + dx, y + dy 
+        while 0 <= x <= 7 and 0 <= y <= 7 and self.board[y][x] == opponent: 
+            flipped.append((x, y)) 
+            x, y = x + dx, y + dy 
+        if not (0 <= x <= 7 and 0 <= y <= 7) or self.board[y][x] != player:  
+            return [] 
+        return flipped 

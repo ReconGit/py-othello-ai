@@ -2,7 +2,7 @@ import random
 import copy
 import math
 from typing import Self
-from .othello import Othello, Cell, State
+from .othello import Othello, State
 
 
 class Node:
