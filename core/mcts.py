@@ -2,7 +2,7 @@ import random
 import copy
 import math
 from typing import Self
-from .othello import Othello, Cell, State
+from .othello import Othello, State
 
 
 class Node:
@@ -59,7 +59,6 @@ def mcts_move(game: Othello, iterations: int, nsims: int) -> tuple[int, int]:
                 simulation.make_move(x, y)
                 node = node.add_child(x, y, turn, simulation.get_valid_moves())
 
-        #TODO: nsmis 
         for _ in range(nsims):
             # simulate
             while simulation.state in (State.BLACK_TURN, State.WHITE_TURN):
