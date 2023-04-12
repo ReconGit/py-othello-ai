@@ -8,9 +8,9 @@ from .othello import Othello, Cell, State
 class Node:
     """Node of the MCTS tree."""
 
-    def __init__(self, x: int, y: int, player: State, unexplored: list[tuple[int, int]], parent: Self | None):
+    def __init__(self, x: int, y: int, turn: State, unexplored: list[tuple[int, int]], parent: Self | None):
         self.position = x, y
-        self.player = player
+        self.turn = turn
         self.unexplored = unexplored
         self.parent = parent
         self.children = []
@@ -26,7 +26,7 @@ class Node:
     def select_child(self) -> Self:
         best_uct = float("-inf")
         selected = self.children[0]
-        for child in self.children:  # UCT formula
+        for child in self.children:  # UCT formula for selecting promising nodes
             child_uct = child.wins / child.visits + math.sqrt(2 * math.log(self.visits) / child.visits)
             if child_uct > best_uct:
                 best_uct = child_uct
@@ -47,7 +47,7 @@ def mcts_move(game: Othello, iterations: int, nsims: int) -> tuple[int, int]:
         simulation = copy.deepcopy(game)
 
         # select
-        while node.unexplored == [] and node.children != []:
+        while node.unexplored == [] and node.children != []:  # node is fully expanded and non-terminal
             node = node.select_child()
             simulation.make_move(node.position[0], node.position[1])
 
@@ -55,9 +55,9 @@ def mcts_move(game: Othello, iterations: int, nsims: int) -> tuple[int, int]:
         if simulation.state in (State.BLACK_TURN, State.WHITE_TURN):  # game could be over from the select step
             if node.unexplored != []:
                 x, y = node.unexplored[random.randint(0, len(node.unexplored) - 1)]
-                player = simulation.state  # player making the move
+                turn = simulation.state
                 simulation.make_move(x, y)
-                node = node.add_child(x, y, player, simulation.get_valid_moves())
+                node = node.add_child(x, y, turn, simulation.get_valid_moves())
 
         #TODO: nsmis 
         for _ in range(nsims):
@@ -71,9 +71,9 @@ def mcts_move(game: Othello, iterations: int, nsims: int) -> tuple[int, int]:
             winner = simulation.state
             while node is not None:
                 node.visits += 1
-                if winner == State.BLACK_WON and node.player == State.BLACK_TURN or winner == State.WHITE_WON and node.player == State.WHITE_TURN:
+                if winner == State.BLACK_WON and node.turn == State.BLACK_TURN or winner == State.WHITE_WON and node.turn == State.WHITE_TURN:
                     node.wins += 1
-                elif winner == State.WHITE_WON and node.player == State.BLACK_TURN or winner == State.BLACK_WON and node.player == State.WHITE_TURN:
+                elif winner == State.WHITE_WON and node.turn == State.BLACK_TURN or winner == State.BLACK_WON and node.turn == State.WHITE_TURN:
                     node.wins -= 1
                 node = node.parent
 

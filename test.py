@@ -96,8 +96,8 @@ def minimax_vs_random():
 def mcts_vs_random():
     start = time.time()
 
-    limit = 10
-    iterations = 10
+    limit = 20
+    iterations = 50
     nsims = 50
 
     games = 0
@@ -163,8 +163,8 @@ def mcts_vs_random():
 def mcts_vs_minimax():
     start = time.time()
 
-    limit = 10
-    iterations = 10
+    limit = 40
+    iterations = 100
     nsims = 50
     depth = 1
 
@@ -227,7 +227,7 @@ def mcts_vs_minimax():
     end = time.time()
     print(f"Time: {end - start}")
 
-
+print("Running test..")
 mcts_vs_minimax()
 #mcts_vs_random()
 #minimax_vs_random()
