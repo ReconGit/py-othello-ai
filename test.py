@@ -163,10 +163,10 @@ def mcts_vs_random():
 def mcts_vs_minimax():
     start = time.time()
 
-    limit = 40
-    iterations = 100
+    limit = 1
+    iterations = 50
     nsims = 50
-    depth = 1
+    depth = 2
 
     games = 0
     black_wins = 0

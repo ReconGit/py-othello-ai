@@ -1,14 +1,14 @@
+from __future__ import annotations
 import random
 import copy
 import math
-from typing import Self
 from .othello import Othello, State
 
 
 class Node:
     """Node of the MCTS tree."""
 
-    def __init__(self, x: int, y: int, turn: State, unexplored: list[tuple[int, int]], parent: Self | None):
+    def __init__(self, x: int, y: int, turn: State, unexplored: list[tuple[int, int]], parent: Node | None):
         self.position = x, y
         self.turn = turn
         self.unexplored = unexplored
@@ -17,13 +17,13 @@ class Node:
         self.visits = 0
         self.wins = 0
 
-    def add_child(self, x: int, y: int, player: State, unexplored: list[tuple[int, int]]) -> Self:
+    def add_child(self, x: int, y: int, player: State, unexplored: list[tuple[int, int]]) -> Node:
         child = Node(x, y, player, unexplored, self)
         self.unexplored.remove((x, y))
         self.children.append(child)
         return child
 
-    def select_child(self) -> Self:
+    def select_child(self) -> Node:
         best_uct = float("-inf")
         selected = self.children[0]
         for child in self.children:  # UCT formula for selecting promising nodes
@@ -33,7 +33,7 @@ class Node:
                 selected = child
         return selected
 
-    def get_most_visited(self) -> Self:  # best move
+    def get_most_visited(self) -> Node:  # best move
         return max(self.children, key=lambda child: child.visits)
 
 
