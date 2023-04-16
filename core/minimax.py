@@ -42,6 +42,7 @@ def _minimax(game: Othello, ai_turn: State, depth: int, alpha: int, beta: int) -
     if (state == State.BLACK_WON): return 200 if State.BLACK_TURN == ai_turn else -200
     elif (state == State.WHITE_WON): return 200 if State.WHITE_TURN == ai_turn else -200
     elif (state == State.DRAW): return 0
+    
     if (depth == 0): return _evaluate_board(game.board, ai_turn)  # use heuristic when out of depth
 
     moves = game.get_valid_moves()

@@ -13,7 +13,7 @@ class Node:
         self.turn = turn
         self.unexplored = unexplored
         self.parent = parent
-        self.children = []
+        self.children: list[Node] = []
         self.visits = 0
         self.wins = 0
 
