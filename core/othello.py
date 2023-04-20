@@ -34,7 +34,7 @@ class Othello:
         self.board[5][4] = Cell.VALID
         self.state = State.BLACK_TURN
 
-    def make_move(self, x, y) -> None:
+    def make_move(self, x: int, y: int) -> None:
         # sanity checks
         if self.state != State.BLACK_TURN and self.state != State.WHITE_TURN:
             raise ValueError("Cannot make move because the game is over.")
@@ -106,7 +106,7 @@ class Othello:
 
         return flipped
 
-    def _flipped_cells_in_direction(self, x: int, y: int, dx: int, dy: int, player: Cell, opponent) -> list[tuple[int, int]]:
+    def _flipped_cells_in_direction(self, x: int, y: int, dx: int, dy: int, player: Cell, opponent: Cell) -> list[tuple[int, int]]:
         flipped = []
         x, y = x + dx, y + dy
         while 0 <= x <= 7 and 0 <= y <= 7 and self.board[y][x] == opponent:
