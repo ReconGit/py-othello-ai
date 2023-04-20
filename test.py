@@ -227,8 +227,9 @@ def mcts_vs_minimax():
     end = time.time()
     print(f"Time: {end - start}")
 
+
 print("Running test..")
 mcts_vs_minimax()
-#mcts_vs_random()
-#minimax_vs_random()
-#performance_test()
+# mcts_vs_random()
+# minimax_vs_random()
+# performance_test()
