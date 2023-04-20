@@ -43,7 +43,8 @@ class Othello:
 
         reverse = Cell.BLACK if self.state == State.BLACK_TURN else Cell.WHITE  # color of current player
         self.board[y][x] = reverse
-        for move in self._flipped_cells(x, y):  # flip cells
+        # reverse cells
+        for move in self._flipped_cells(x, y):
             self.board[move[1]][move[0]] = reverse
         self._update_state()
 
@@ -61,6 +62,7 @@ class Othello:
         # update score
         self.black_score = sum(row.count(Cell.BLACK) for row in self.board)
         self.white_score = sum(row.count(Cell.WHITE) for row in self.board)
+
         # check if game is over
         if self._is_full() or self.black_score == 0 or self.white_score == 0:
             if self.black_score > self.white_score:
@@ -70,6 +72,7 @@ class Othello:
             else:
                 self.state = State.DRAW
             return
+
         # switch turn
         self.state = State.WHITE_TURN if self.state == State.BLACK_TURN else State.BLACK_TURN
         self._update_valid_moves()
@@ -94,7 +97,7 @@ class Othello:
                 if self.board[y][x] == Cell.EMPTY and self._flipped_cells(x, y) != []:
                     self.board[y][x] = Cell.VALID
 
-    def _flipped_cells(self, x, y) -> list[tuple[int, int]]:
+    def _flipped_cells(self, x: int, y: int) -> list[tuple[int, int]]:
         player = Cell.BLACK if self.state == State.BLACK_TURN else Cell.WHITE
         opponent = Cell.WHITE if self.state == State.BLACK_TURN else Cell.BLACK
         flipped = []
@@ -103,12 +106,12 @@ class Othello:
 
         return flipped
 
-    def _flipped_cells_in_direction(self, x, y, dx, dy, player, opponent) -> list[tuple[int, int]]:
+    def _flipped_cells_in_direction(self, x: int, y: int, dx: int, dy: int, player: Cell, opponent) -> list[tuple[int, int]]:
         flipped = []
-        x, y = x + dx, y + dy 
-        while 0 <= x <= 7 and 0 <= y <= 7 and self.board[y][x] == opponent: 
-            flipped.append((x, y)) 
-            x, y = x + dx, y + dy 
-        if not (0 <= x <= 7 and 0 <= y <= 7) or self.board[y][x] != player:  
-            return [] 
-        return flipped 
+        x, y = x + dx, y + dy
+        while 0 <= x <= 7 and 0 <= y <= 7 and self.board[y][x] == opponent:
+            flipped.append((x, y))
+            x, y = x + dx, y + dy
+        if not (0 <= x <= 7 and 0 <= y <= 7) or self.board[y][x] != player:
+            return []
+        return flipped
