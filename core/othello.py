@@ -103,7 +103,6 @@ class Othello:
         flipped = []
         for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)):
             flipped += self._flipped_cells_in_direction(x, y, dx, dy, player, opponent)
-
         return flipped
 
     def _flipped_cells_in_direction(self, x: int, y: int, dx: int, dy: int, player: Cell, opponent: Cell) -> list[tuple[int, int]]:
