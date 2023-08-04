@@ -17,8 +17,8 @@ class Node:
         self.visits = 0
         self.wins = 0
 
-    def add_and_get_child(self, x: int, y: int, state: State, unexplored: list[tuple[int, int]]) -> Node:
-        child = Node(x, y, state, unexplored, self)
+    def add_and_get_child(self, x: int, y: int, turn: State, unexplored: list[tuple[int, int]]) -> Node:
+        child = Node(x, y, turn, unexplored, self)
         self.unexplored.remove((x, y))
         self.children.append(child)
         return child
