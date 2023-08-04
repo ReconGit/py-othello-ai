@@ -40,7 +40,6 @@ class Node:
 
 def mcts_move(game: Othello, iterations: int) -> tuple[int, int]:
     """Returns the best move for the current turn using Monte Carlo Tree Search."""
-
     root = Node(-1, -1, game.state, game.get_valid_moves(), None)  # root node has no position
     for _ in range(iterations):  # one iteration explores one move
         node = root
