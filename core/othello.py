@@ -35,6 +35,7 @@ class Othello:
         self.state = State.BLACK_TURN
 
     def make_move(self, x: int, y: int) -> None:
+        """Makes a move at the given position and updates the game state."""
         # sanity checks
         if self.state != State.BLACK_TURN and self.state != State.WHITE_TURN:
             raise ValueError("Cannot make move because the game is over.")
@@ -49,6 +50,7 @@ class Othello:
         self._update_state()
 
     def get_valid_moves(self) -> list[tuple[int, int]]:
+        """Returns a list of valid moves for the current turn."""
         if self.state not in (State.BLACK_TURN, State.WHITE_TURN):
             return []
         return [(x, y) for x in range(8) for y in range(8) if self.board[y][x] == Cell.VALID]
