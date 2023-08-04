@@ -49,6 +49,8 @@ class Othello:
         self._update_state()
 
     def get_valid_moves(self) -> list[tuple[int, int]]:
+        if self.state not in (State.BLACK_TURN, State.WHITE_TURN):
+            return []
         return [(x, y) for x in range(8) for y in range(8) if self.board[y][x] == Cell.VALID]
 
     def _is_full(self) -> bool:
