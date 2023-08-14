@@ -4,6 +4,7 @@ from core.othello import Othello, State
 from core.minimax import minimax_move
 from core.mcts import mcts_move
 from colorama import Fore, Style
+from typing import Callable
 
 
 def random_move(game: Othello) -> tuple[int, int]:
@@ -12,7 +13,7 @@ def random_move(game: Othello) -> tuple[int, int]:
     return x, y
 
 
-def benchmark_game(BLACK_AI, WHITE_AI, games_count) -> None:
+def benchmark_game(BLACK_AI: Callable[..., tuple[int, int]], WHITE_AI: Callable[..., tuple[int, int]], games_count: int) -> None:
     black_wins = 0
     white_wins = 0
     draws = 0
