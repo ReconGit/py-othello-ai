@@ -15,10 +15,10 @@ def main():
         print_board(game.board)
         print_score(game)
         try:
-            x, y = mcts_move(game, 10) if game.state == State.BLACK_TURN else minimax_move(game, 1)
+            move = mcts_move(game, 10) if game.state == State.BLACK_TURN else minimax_move(game, 1)
             print_turn(game)
-            print(f"move: {chr(ord('A') + x)}{str(y + 1)}")
-            game.make_move(x, y)
+            print(f"move: {chr(ord('A') + move[0])}{str(move[1] + 1)}")
+            game.make_move(move)
         except IndexError as e:
             print(e)
 

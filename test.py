@@ -9,8 +9,8 @@ from typing import Callable
 
 def random_move(game: Othello) -> tuple[int, int]:
     moves = game.get_valid_moves()
-    x, y = moves[random.randint(0, len(moves) - 1)]
-    return x, y
+    move = moves[random.randint(0, len(moves) - 1)]
+    return move
 
 
 def benchmark_game(BLACK_AI: Callable[[Othello], tuple[int, int]], WHITE_AI: Callable[[Othello], tuple[int, int]], games_count: int) -> None:
@@ -25,8 +25,8 @@ def benchmark_game(BLACK_AI: Callable[[Othello], tuple[int, int]], WHITE_AI: Cal
         game = Othello()
         while game.state == State.BLACK_TURN or game.state == State.WHITE_TURN:
             try:
-                x, y = BLACK_AI(game) if game.state == State.BLACK_TURN else WHITE_AI(game)
-                game.make_move(x, y)
+                move = BLACK_AI(game) if game.state == State.BLACK_TURN else WHITE_AI(game)
+                game.make_move(move)
             except IndexError as e:
                 print(e)
 

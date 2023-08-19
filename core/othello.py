@@ -34,19 +34,19 @@ class Othello:
         self.board[5][4] = Cell.VALID
         self.state = State.BLACK_TURN
 
-    def make_move(self, x: int, y: int) -> None:
+    def make_move(self, move: tuple[int, int]) -> None:
         """Makes a move at the given position and updates the game state."""
         # sanity checks
-        if self.state != State.BLACK_TURN and self.state != State.WHITE_TURN:
+        if self.state not in (State.BLACK_TURN, State.WHITE_TURN):
             raise ValueError("Cannot make move because the game is over.")
-        if self.board[y][x] != Cell.VALID:
+        if self.board[move[1]][move[0]] != Cell.VALID:
             raise IndexError("Position is not valid.")
 
+        # reverse cells and update state
         reverse = Cell.BLACK if self.state == State.BLACK_TURN else Cell.WHITE  # color of current player
-        self.board[y][x] = reverse
-        # reverse cells
-        for move in self._flipped_cells(x, y):
-            self.board[move[1]][move[0]] = reverse
+        self.board[move[1]][move[0]] = reverse
+        for cell in self._flipped_cells(move):
+            self.board[cell[1]][cell[0]] = reverse
         self._update_state()
 
     def get_valid_moves(self) -> list[tuple[int, int]]:
@@ -98,14 +98,15 @@ class Othello:
             for x in range(8):
                 if self.board[y][x] == Cell.VALID:
                     self.board[y][x] = Cell.EMPTY
-                if self.board[y][x] == Cell.EMPTY and self._flipped_cells(x, y) != []:
+                if self.board[y][x] == Cell.EMPTY and self._flipped_cells((x, y)) != []:
                     self.board[y][x] = Cell.VALID
 
-    def _flipped_cells(self, x: int, y: int) -> list[tuple[int, int]]:
+    def _flipped_cells(self, move: tuple[int, int]) -> list[tuple[int, int]]:
         player = Cell.BLACK if self.state == State.BLACK_TURN else Cell.WHITE
         opponent = Cell.WHITE if self.state == State.BLACK_TURN else Cell.BLACK
         flipped = []
         for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)):
+            x, y = move[0], move[1]
             flipped += self._flipped_cells_in_direction(x, y, dx, dy, player, opponent)
         return flipped
 

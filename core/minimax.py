@@ -26,7 +26,7 @@ def minimax_move(game: Othello, depth: int) -> tuple[int, int]:
     best_value = -sys.maxsize
     for move in moves:
         simulation = copy.deepcopy(game)
-        simulation.make_move(move[0], move[1])
+        simulation.make_move(move)
         value = _minimax(simulation, my_turn, depth - 1, -sys.maxsize, sys.maxsize)
         # print(f"Move: {move}, value: {value}") # for debug
         if value > best_value:
@@ -51,7 +51,7 @@ def _minimax(game: Othello, my_turn: State, depth: int, alpha: int, beta: int) -
     best_value = -sys.maxsize if state == my_turn else sys.maxsize
     for move in moves:
         simulation = copy.deepcopy(game)
-        simulation.make_move(move[0], move[1])
+        simulation.make_move(move)
         value = _minimax(simulation, my_turn, depth - 1, alpha, beta)
 
         if state == my_turn:
