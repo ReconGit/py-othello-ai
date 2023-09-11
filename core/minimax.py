@@ -15,9 +15,9 @@ def minimax_move(game: Othello, depth: int) -> tuple[int, int]:
         return moves[random.randint(0, len(moves) - 1)]
 
     # iterate depth based on round index, later rounds matter more
-    if round_idx >= 50: depth = depth + 10  # end game solver
-    elif round_idx > 44: depth = depth + 2  # later rounds are faster
-    elif round_idx > 34: depth = depth + 1
+    if round_idx >= 48: depth = depth + 10  # end game solver
+    elif round_idx > 40: depth = depth + 2  # later rounds are faster
+    elif round_idx > 32: depth = depth + 1
     # elif round_idx > 24: depth = depth + 1
     # elif round_idx < 20: depth = depth + 1  # early rounds are fast
 

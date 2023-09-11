@@ -55,13 +55,6 @@ class Othello:
             return []
         return [(x, y) for x in range(8) for y in range(8) if self.board[y][x] == Cell.VALID]
 
-    def _is_full(self) -> bool:
-        for y in range(8):
-            for x in range(8):
-                if self.board[y][x] in (Cell.EMPTY, Cell.VALID):
-                    return False
-        return True
-
     def _update_state(self) -> None:
         # update score
         self.black_score = sum(row.count(Cell.BLACK) for row in self.board)
@@ -77,13 +70,13 @@ class Othello:
                 self.state = State.DRAW
             return
 
-        # switch turn
+        # switch turn and update valid cells
         self.state = State.WHITE_TURN if self.state == State.BLACK_TURN else State.BLACK_TURN
-        self._update_valid_moves()
+        self._update_valid_cells()
         if len(self.get_valid_moves()) == 0:
             # print("No valid moves. Skipping turn.")  # for debug
             self.state = State.WHITE_TURN if self.state == State.BLACK_TURN else State.BLACK_TURN
-            self._update_valid_moves()
+            self._update_valid_cells()
             if len(self.get_valid_moves()) == 0:
                 # print("No valid moves even for the other player. Game over.")  # for debug
                 if self.black_score > self.white_score:
@@ -92,8 +85,15 @@ class Othello:
                     self.state = State.WHITE_WON
                 else:
                     self.state = State.DRAW
+    
+    def _is_full(self) -> bool:
+        for y in range(8):
+            for x in range(8):
+                if self.board[y][x] in (Cell.EMPTY, Cell.VALID):
+                    return False
+        return True
 
-    def _update_valid_moves(self) -> None:
+    def _update_valid_cells(self) -> None:
         for y in range(8):
             for x in range(8):
                 if self.board[y][x] == Cell.VALID:
@@ -105,17 +105,17 @@ class Othello:
         player = Cell.BLACK if self.state == State.BLACK_TURN else Cell.WHITE
         opponent = Cell.WHITE if self.state == State.BLACK_TURN else Cell.BLACK
         flipped = []
+        x, y = move[0], move[1]
         for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)):
-            x, y = move[0], move[1]
             flipped += self._flipped_cells_in_direction(x, y, dx, dy, player, opponent)
         return flipped
 
     def _flipped_cells_in_direction(self, x: int, y: int, dx: int, dy: int, player: Cell, opponent: Cell) -> list[tuple[int, int]]:
         flipped = []
         x, y = x + dx, y + dy
-        while 0 <= x <= 7 and 0 <= y <= 7 and self.board[y][x] == opponent:
+        while 0 <= x < 8 and 0 <= y < 8 and self.board[y][x] == opponent:
             flipped.append((x, y))
             x, y = x + dx, y + dy
-        if not (0 <= x <= 7 and 0 <= y <= 7) or self.board[y][x] != player:
+        if not (0 <= x < 8 and 0 <= y < 8) or self.board[y][x] != player:
             return []
         return flipped

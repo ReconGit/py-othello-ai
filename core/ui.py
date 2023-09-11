@@ -45,11 +45,11 @@ def print_score(game: Othello) -> None:
     print(f"{ANSI_BLACK}Black: {game.black_score}{ANSI_RESET} | White: {game.white_score}")
 
 
-def print_turn(game: Othello) -> None:
+def print_state(game: Othello) -> None:
     """Print whose turn it is."""
     if game.state == State.BLACK_TURN:
-        print(f"\n{ANSI_BLACK}BLACK turn: {ANSI_RESET}")
+        print(f"{ANSI_BLACK}     BLACK turn {ANSI_RESET}")
     elif game.state == State.WHITE_TURN:
-        print("\nWHITE turn: ")
+        print("     WHITE turn ")
     else:
-        print("\nUnexpected state.")
+        print("  Unexpected state.")
