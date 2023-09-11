@@ -21,7 +21,7 @@ def main():
         except IndexError as e:
             print(e)
 
-    print(f"\n      Game Over!")
+    print(f"\n     Game Over!")
     print_board(game.board)
     print_score(game)
     if game.state == State.BLACK_WON:
