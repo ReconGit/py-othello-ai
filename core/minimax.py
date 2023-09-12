@@ -3,6 +3,17 @@ import random
 import sys
 from .othello import Othello, Cell, State
 
+REWARDS = [
+    [80, -20, 20, 10, 10, 20, -20, 80],
+    [-20, -40, -10, -10, -10, -10, -40, -20],
+    [20, -10, 10, 0, 0, 10, -10, 20],
+    [10, -10, 0, 5, 5, 0, -10, 10],
+    [10, -10, 0, 5, 5, 0, -10, 10],
+    [20, -10, 10, 0, 0, 10, -10, 20],
+    [-20, -40, -10, -10, -10, -10, -40, -20],
+    [80, -20, 20, 10, 10, 20, -20, 80],
+]
+
 
 def minimax_move(game: Othello, depth: int) -> tuple[int, int]:
     """Use minimax algorithm to find a good move for the current player."""
@@ -15,9 +26,9 @@ def minimax_move(game: Othello, depth: int) -> tuple[int, int]:
         return moves[random.randint(0, len(moves) - 1)]
 
     # iterate depth based on round index, later rounds matter more
-    if round_idx >= 48: depth = depth + 10  # end game solver
-    elif round_idx > 40: depth = depth + 2  # later rounds are faster
-    elif round_idx > 32: depth = depth + 1
+    if round_idx >= 50: depth += 10  # end game solver
+    elif round_idx > 40: depth += 2  # later rounds are faster
+    elif round_idx > 30: depth += 1
 
     my_turn = game.state
     best_move = moves[0]
@@ -38,8 +49,8 @@ def minimax_move(game: Othello, depth: int) -> tuple[int, int]:
 def _minimax(game: Othello, my_turn: State, depth: int, alpha: int, beta: int) -> int:
     """Minimax tree search algorithm."""
     state = game.state
-    if state == State.BLACK_WON: return 300 if State.BLACK_TURN == my_turn else -300
-    elif state == State.WHITE_WON: return 300 if State.WHITE_TURN == my_turn else -300
+    if state == State.BLACK_WON: return 300 if my_turn == State.BLACK_TURN else -300
+    elif state == State.WHITE_WON: return 300 if my_turn == State.WHITE_TURN else -300
     elif state == State.DRAW: return 0
 
     if depth <= 0:  # use heuristic when out of depth
@@ -53,35 +64,25 @@ def _minimax(game: Othello, my_turn: State, depth: int, alpha: int, beta: int) -
         value = _minimax(simulation, my_turn, depth - 1, alpha, beta)
 
         if state == my_turn:
-            best_value = max(value, best_value)
-            alpha = max(value, alpha)
+            best_value = max(best_value, value)
+            alpha = max(best_value, alpha)
         else:
-            best_value = min(value, best_value)
-            beta = min(value, beta,)
+            best_value = min(best_value, value)
+            beta = min(best_value, beta,)
         if alpha >= beta: break  # prune
 
     return best_value
 
 
-def _evaluate_board(board: list[list[Cell]], ai_turn: State) -> int:
+def _evaluate_board(board: list[list[Cell]], my_turn: State) -> int:
     """Use a heuristic to evaluate the board."""
-    rewards = [
-        [80, -20, 20, 10, 10, 20, -20, 80],
-        [-20, -40, -10, -10, -10, -10, -40, -20],
-        [20, -10, 10, 0, 0, 10, -10, 20],
-        [10, -10, 0, 5, 5, 0, -10, 10],
-        [10, -10, 0, 5, 5, 0, -10, 10],
-        [20, -10, 10, 0, 0, 10, -10, 20],
-        [-20, -40, -10, -10, -10, -10, -40, -20],
-        [80, -20, 20, 10, 10, 20, -20, 80],
-    ]
     reward = 0
     for y in range(8):
         for x in range(8):
             if board[y][x] == Cell.BLACK:
-                reward += rewards[y][x] if ai_turn == State.BLACK_TURN else -rewards[y][x]
+                reward += REWARDS[y][x] if my_turn == State.BLACK_TURN else -REWARDS[y][x]
             elif board[y][x] == Cell.WHITE:
-                reward += rewards[y][x] if ai_turn == State.WHITE_TURN else -rewards[y][x]
+                reward += REWARDS[y][x] if my_turn == State.WHITE_TURN else -REWARDS[y][x]
     return reward
 
 

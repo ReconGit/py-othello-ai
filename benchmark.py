@@ -6,43 +6,43 @@ from core.mcts import mcts_move
 from colorama import Fore, Style
 from typing import Callable
 
-GAMES_COUNT = 2
+GAMES_COUNT = 10
 MINIMAX_DEPTH = 1
-MCTS_SIMULATIONS = 100
+MCTS_SIMULATIONS = 10
 
 
-def test() -> None:
-    print(f"{Fore.MAGENTA}Starting benchmarks...{Style.RESET_ALL}\n")
+def run_benchmarks() -> None:
+    print(f"{Fore.MAGENTA}Running benchmarks...{Style.RESET_ALL}\n")
     start_time = time.time()
 
-    # print(f"{Fore.BLUE}Random vs. Random:{Style.RESET_ALL}")
-    # benchmark_game(random_move, random_move)
+    print(f"{Fore.BLUE}Random vs Random:{Style.RESET_ALL}")
+    benchmark_game(random_move, random_move)
 
-    # print(f"{Fore.BLUE}BLACK Minimax vs. WHITE Random:{Style.RESET_ALL}")
-    # benchmark_game(lambda game: minimax_move(game, 2), random_move)
+    print(f"{Fore.BLUE}BLACK Minimax vs WHITE Random:{Style.RESET_ALL}")
+    benchmark_game(lambda game: minimax_move(game, 2), random_move)
 
-    # print(f"{Fore.BLUE}WHITE Minimax vs. BLACK Random:{Style.RESET_ALL}")
-    # benchmark_game(random_move, lambda game: minimax_move(game, 2))
+    print(f"{Fore.BLUE}WHITE Minimax vs BLACK Random:{Style.RESET_ALL}")
+    benchmark_game(random_move, lambda game: minimax_move(game, 2))
 
-    # print(f"{Fore.BLUE}Minimax vs. Minimax:{Style.RESET_ALL}")
-    # benchmark_game(lambda game: minimax_move(game, MINIMAX_DEPTH), lambda game: minimax_move(game, MINIMAX_DEPTH))
+    print(f"{Fore.BLUE}Minimax vs Minimax:{Style.RESET_ALL}")
+    benchmark_game(lambda game: minimax_move(game, MINIMAX_DEPTH), lambda game: minimax_move(game, MINIMAX_DEPTH))
 
-    print(f"{Fore.BLUE}BLACK MCTS vs. WHITE Random:{Style.RESET_ALL}")
+    print(f"{Fore.BLUE}BLACK MCTS vs WHITE Random:{Style.RESET_ALL}")
     benchmark_game(lambda game: mcts_move(game, MCTS_SIMULATIONS), random_move)
 
-    print(f"{Fore.BLUE}WHITE MCTS vs. BLACK Random:{Style.RESET_ALL}")
+    print(f"{Fore.BLUE}WHITE MCTS vs BLACK Random:{Style.RESET_ALL}")
     benchmark_game(random_move, lambda game: mcts_move(game, MCTS_SIMULATIONS))
 
-    # print(f"{Fore.BLUE}MCTS vs. MCTS:{Style.RESET_ALL}")
-    # benchmark_game(lambda game: mcts_move(game, MCTS_SIMULATIONS), lambda game: mcts_move(game, MCTS_SIMULATIONS))
+    print(f"{Fore.BLUE}MCTS vs MCTS:{Style.RESET_ALL}")
+    benchmark_game(lambda game: mcts_move(game, MCTS_SIMULATIONS), lambda game: mcts_move(game, MCTS_SIMULATIONS))
 
-    # print(f"{Fore.BLUE}BLACK Minimax vs. WHITE MCTS:{Style.RESET_ALL}")
-    # benchmark_game(lambda game: minimax_move(game, MINIMAX_DEPTH), lambda game: mcts_move(game, MCTS_SIMULATIONS))
+    print(f"{Fore.BLUE}BLACK Minimax vs WHITE MCTS:{Style.RESET_ALL}")
+    benchmark_game(lambda game: minimax_move(game, MINIMAX_DEPTH), lambda game: mcts_move(game, MCTS_SIMULATIONS))
 
-    # print(f"{Fore.BLUE}WHITE Minimax vs. BLACK MCTS:{Style.RESET_ALL}")
-    # benchmark_game(lambda game: mcts_move(game, MCTS_SIMULATIONS), lambda game: minimax_move(game, MINIMAX_DEPTH))
+    print(f"{Fore.BLUE}WHITE Minimax vs BLACK MCTS:{Style.RESET_ALL}")
+    benchmark_game(lambda game: mcts_move(game, MCTS_SIMULATIONS), lambda game: minimax_move(game, MINIMAX_DEPTH))
 
-    print(f"{Fore.MAGENTA}Total time elapsed: {time.time() - start_time}{Style.RESET_ALL}\n")
+    print(f"{Fore.MAGENTA}Total time elapsed: {time.time() - start_time:.2f}{Style.RESET_ALL}")
 
 
 def benchmark_game(BLACK_AI: Callable[[Othello], tuple[int, int]], WHITE_AI: Callable[[Othello], tuple[int, int]]) -> None:
@@ -82,4 +82,4 @@ def random_move(game: Othello) -> tuple[int, int]:
 
 
 if __name__ == "__main__":
-    test()
+    run_benchmarks()

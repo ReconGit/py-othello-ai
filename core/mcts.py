@@ -27,10 +27,10 @@ class Node:
         best_uct = float("-inf")
         selected = self.children[0]
 
-        log_total = 2 * math.log(self.visits)
+        ln_total = 2 * math.log(self.visits)
         for child in self.children:
             # UCT formula for selecting promising nodes
-            child_uct = child.wins / child.visits + math.sqrt(log_total / child.visits)
+            child_uct = child.wins / child.visits + math.sqrt(ln_total / child.visits)
             if child_uct > best_uct:
                 best_uct = child_uct
                 selected = child
@@ -54,16 +54,16 @@ def mcts_move(game: Othello, iterations: int) -> tuple[int, int]:
 
         # EXPAND one random unexplored move
         if node.unexplored != []:
-            move = node.unexplored[random.randint(0, len(node.unexplored) - 1)]
-            turn = simulation.state
-            simulation.make_move(move)
-            node = node.add_and_get_child(move, turn, simulation.get_valid_moves())
+            explored_move = node.unexplored[random.randint(0, len(node.unexplored) - 1)]
+            explored_turn = simulation.state
+            simulation.make_move(explored_move)
+            node = node.add_and_get_child(explored_move, explored_turn, simulation.get_valid_moves())
 
         # SIMULATE while game is not over, make a random move
         while simulation.state in (State.BLACK_TURN, State.WHITE_TURN):
             moves = simulation.get_valid_moves()
-            move = moves[random.randint(0, len(moves) - 1)]
-            simulation.make_move(move)
+            explored_move = moves[random.randint(0, len(moves) - 1)]
+            simulation.make_move(explored_move)
 
         # BACKPROPAGATE simulation result
         winner = simulation.state
