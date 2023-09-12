@@ -18,8 +18,6 @@ def minimax_move(game: Othello, depth: int) -> tuple[int, int]:
     if round_idx >= 48: depth = depth + 10  # end game solver
     elif round_idx > 40: depth = depth + 2  # later rounds are faster
     elif round_idx > 32: depth = depth + 1
-    # elif round_idx > 24: depth = depth + 1
-    # elif round_idx < 20: depth = depth + 1  # early rounds are fast
 
     my_turn = game.state
     best_move = moves[0]
@@ -56,10 +54,10 @@ def _minimax(game: Othello, my_turn: State, depth: int, alpha: int, beta: int) -
 
         if state == my_turn:
             best_value = max(value, best_value)
-            alpha = max(alpha, best_value)
+            alpha = max(value, alpha)
         else:
             best_value = min(value, best_value)
-            beta = min(beta, best_value)
+            beta = min(value, beta,)
         if alpha >= beta: break  # prune
 
     return best_value
