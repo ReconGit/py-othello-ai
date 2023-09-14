@@ -19,10 +19,10 @@ def run_benchmarks() -> None:
     benchmark_game(random_move, random_move)
 
     print(f"{Fore.BLUE}BLACK Minimax vs WHITE Random:{Style.RESET_ALL}")
-    benchmark_game(lambda game: minimax_move(game, 2), random_move)
+    benchmark_game(lambda game: minimax_move(game, MINIMAX_DEPTH), random_move)
 
     print(f"{Fore.BLUE}WHITE Minimax vs BLACK Random:{Style.RESET_ALL}")
-    benchmark_game(random_move, lambda game: minimax_move(game, 2))
+    benchmark_game(random_move, lambda game: minimax_move(game, MINIMAX_DEPTH))
 
     print(f"{Fore.BLUE}Minimax vs Minimax:{Style.RESET_ALL}")
     benchmark_game(lambda game: minimax_move(game, MINIMAX_DEPTH), lambda game: minimax_move(game, MINIMAX_DEPTH))
