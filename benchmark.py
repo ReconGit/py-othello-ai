@@ -70,9 +70,9 @@ def benchmark_game(BLACK_AI: Callable[[Othello], tuple[int, int]], WHITE_AI: Cal
             draws += 1
 
     print(f"  elapsed time: {time.time() - start_time:.2f}s                     ")
-    print(f"    BLACK wins: {black_wins} {black_wins / GAMES_COUNT * 100:.1f}%")
-    print(f"    WHITE wins: {white_wins} {white_wins / GAMES_COUNT * 100:.1f}%")
-    print(f"         draws: {draws} {draws / GAMES_COUNT * 100:.1f}%\n")
+    print(f"    BLACK wins: {black_wins} {black_wins / GAMES_COUNT * 100:.0f}%")
+    print(f"    WHITE wins: {white_wins} {white_wins / GAMES_COUNT * 100:.0f}%")
+    print(f"         draws: {draws} {draws / GAMES_COUNT * 100:.0f}%\n")
 
 
 def random_move(game: Othello) -> tuple[int, int]:

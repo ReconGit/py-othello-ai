@@ -36,11 +36,10 @@ class Othello:
 
     def make_move(self, move: tuple[int, int]) -> None:
         """Makes a move at the given position and updates the game state."""
-        # sanity checks
         if self.state not in (State.BLACK_TURN, State.WHITE_TURN):
-            raise ValueError("Cannot make move because the game is over.")
+            raise ValueError("Can't make move: Game is over")
         if self.board[move[1]][move[0]] != Cell.VALID:
-            raise IndexError("Position is not valid.")
+            raise IndexError(f"Can't make move: Position invalid {move}")
 
         # reverse cells and update state
         reverse = Cell.BLACK if self.state == State.BLACK_TURN else Cell.WHITE  # color of current player
@@ -56,7 +55,6 @@ class Othello:
         return [(x, y) for x in range(8) for y in range(8) if self.board[y][x] == Cell.VALID]
 
     def _update_state(self) -> None:
-        # update score
         self.black_score = sum(row.count(Cell.BLACK) for row in self.board)
         self.white_score = sum(row.count(Cell.WHITE) for row in self.board)
 
@@ -85,7 +83,7 @@ class Othello:
                     self.state = State.WHITE_WON
                 else:
                     self.state = State.DRAW
-    
+
     def _is_full(self) -> bool:
         for y in range(8):
             for x in range(8):
