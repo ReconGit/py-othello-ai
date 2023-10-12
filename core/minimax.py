@@ -49,10 +49,7 @@ def _minimax(game: Othello, my_turn: State, depth: int, alpha: int, beta: int) -
             if value < best_value:
                 best_value = value
                 best_move = move
-            beta = min(
-                best_value,
-                beta,
-            )
+            beta = min(best_value, beta)
         if alpha >= beta:
             break  # prune
 
