@@ -1,5 +1,5 @@
 import numpy as np
-from numba import jit, njit
+from numba import njit
 
 # Constants replacing Enums
 CELL_EMPTY = 0
@@ -14,7 +14,19 @@ STATE_WHITE_WON = 4
 STATE_DRAW = 5
 
 # Directions for checking flipped cells
-DIRECTIONS = np.array([[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]], dtype=np.int32)
+DIRECTIONS = np.array(
+    [
+        [1, 0],
+        [-1, 0],
+        [0, 1],
+        [0, -1],
+        [1, 1],
+        [-1, -1],
+        [1, -1],
+        [-1, 1],
+    ],
+    dtype=np.int32,
+)
 
 
 @njit
@@ -220,115 +232,3 @@ def flipped_cells_in_direction(
     if not (0 <= x < 8 and 0 <= y < 8) or board[y, x] != player:
         return flipped[:0]
     return flipped[:count]
-
-
-@njit
-def make_move_reversible(
-    board: np.ndarray,
-    black_score: np.int32,
-    white_score: np.int32,
-    state: np.int32,
-    move_x: int,
-    move_y: int,
-):
-    """Make a move and return flipped cells for undoing. Returns (board, black_score, white_score, state, flipped)."""
-
-    if state not in (STATE_BLACK_TURN, STATE_WHITE_TURN) or board[move_y, move_x] != 3:
-        return board, black_score, white_score, state, np.zeros((0, 2), dtype=np.int32)
-
-    player = CELL_BLACK if state == STATE_BLACK_TURN else CELL_WHITE
-    opponent = CELL_WHITE if state == STATE_BLACK_TURN else CELL_BLACK
-    board[move_y, move_x] = player
-
-    flipped = get_flipped_cells(board, move_x, move_y, player, opponent)
-    num_flipped = flipped.shape[0]
-    for x, y in flipped:
-        board[y, x] = player
-
-    # Update scores
-    if player == CELL_BLACK:
-        black_score += 1 + num_flipped
-        white_score -= num_flipped
-    else:
-        white_score += 1 + num_flipped
-        black_score -= num_flipped
-
-    board, black_score, white_score, new_state, _ = update_state(board, black_score, white_score, state)
-    return board, black_score, white_score, new_state, flipped
-
-
-@njit
-def undo_move(
-    board: np.ndarray,
-    move_x: int,
-    move_y: int,
-    flipped: np.ndarray,
-    original_state: np.int32,
-):
-    """Undo a move by restoring the board."""
-
-    player = CELL_BLACK if original_state == STATE_BLACK_TURN else CELL_WHITE
-    opponent = CELL_WHITE if original_state == STATE_BLACK_TURN else CELL_BLACK
-
-    # Restore flipped cells to opponent
-    for x, y in flipped:
-        board[y, x] = opponent
-
-    # Clear the move position
-    board[move_y, move_x] = 0  # Will be updated to VALID later if needed
-
-
-# Example usage (not Numba-compiled)
-def print_board(board: np.ndarray) -> None:
-    """Print the board for debugging."""
-
-    for row in board:
-        print(
-            " ".join(
-                ["." if c == CELL_EMPTY else "V" if c == CELL_VALID else "B" if c == CELL_BLACK else "W" for c in row]
-            )
-        )
-    print()
-
-
-def state_to_str(state: int) -> str:
-    """Convert state to string for printing."""
-
-    return {
-        STATE_BLACK_TURN: "Black's turn",
-        STATE_WHITE_TURN: "White's turn",
-        STATE_BLACK_WON: "Black won",
-        STATE_WHITE_WON: "White won",
-        STATE_DRAW: "Draw",
-    }.get(state, "Unknown")
-
-
-if __name__ == "__main__":
-    # Initialize game
-    board, black_score, white_score, state = init_game()
-    print("Initial board:")
-    print_board(board)
-
-    # Test a valid move
-    print("Making move (3, 2):")
-    board, black_score, white_score, state, success = make_move(board, black_score, white_score, state, 3, 2)
-    if success:
-        print("Move successful!")
-        print_board(board)
-        print(f"Black score: {black_score}, White score: {white_score}")
-        print(f"State: {state_to_str(state)}")
-
-        # Print valid moves
-        valid_moves = get_valid_moves(board, state)
-        print("Valid moves:", valid_moves.tolist())
-    else:
-        print("Move failed!")
-
-    # Test an invalid move
-    print("\nMaking invalid move (0, 0):")
-    board, black_score, white_score, state, success = make_move(board, black_score, white_score, state, 0, 0)
-    if success:
-        print("Move successful!")
-        print_board(board)
-    else:
-        print("Move failed!")

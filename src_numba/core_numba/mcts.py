@@ -1,22 +1,25 @@
 from __future__ import annotations
-import random
+
 import math
+import random
+
 import numpy as np
 from numba import njit
-from typing import List, Tuple
+
 from .othello import (
-    make_move,
-    get_valid_moves,
     STATE_BLACK_TURN,
-    STATE_WHITE_TURN,
     STATE_BLACK_WON,
-    STATE_WHITE_WON,
     STATE_DRAW,
+    STATE_WHITE_TURN,
+    STATE_WHITE_WON,
+    get_valid_moves,
+    make_move,
 )
 
 
-def mcts_move(board: np.ndarray, black_score: int, white_score: int, state: int, iterations: int) -> Tuple[int, int]:
+def mcts_move(board: np.ndarray, black_score: int, white_score: int, state: int, iterations: int):
     """Returns the best move for the current turn using Monte Carlo Tree Search."""
+
     valid_moves = [tuple(move) for move in get_valid_moves(board, state)]  # Convert to list of tuples
     root = Node(None, (-1, -1), state, valid_moves)
 
@@ -68,12 +71,12 @@ def mcts_move(board: np.ndarray, black_score: int, white_score: int, state: int,
 class Node:
     """Node of the MCTS tree."""
 
-    def __init__(self, parent: Node | None, move: Tuple[int, int], turn: int, unexplored: List[Tuple[int, int]]):
+    def __init__(self, parent: Node | None, move: tuple[int, int], turn: int, unexplored: list[tuple[int, int]]):
         self.move = move
         self.turn = turn
         self.unexplored = unexplored
         self.parent = parent
-        self.children: List[Node] = []
+        self.children: list[Node] = []
         self.visits = 0
         self.wins = 0
 

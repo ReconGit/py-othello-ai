@@ -34,6 +34,7 @@ REWARDS = np.array(
 
 def minimax_move(board: np.ndarray, black_score: int, white_score: int, state: int, depth: int) -> Tuple[int, int]:
     """Use minimax to find a good move for the current player. Returns (x, y)."""
+
     moves = [tuple(move) for move in get_valid_moves(board, state)]  # Convert to list of tuples
     if not moves:
         return (-1, -1)
@@ -67,6 +68,7 @@ def _minimax(
     beta: float,
 ) -> Tuple[float, Tuple[int, int]]:
     """Minimax with alpha-beta pruning. Returns (value, (x, y))."""
+
     if depth == 0 or state not in (STATE_BLACK_TURN, STATE_WHITE_TURN):
         return _evaluate_board(board, black_score, white_score, state, my_turn), (-1, -1)
 
@@ -111,6 +113,7 @@ def _minimax(
 @njit
 def _evaluate_board(board: np.ndarray, black_score: int, white_score: int, state: int, my_turn: int) -> float:
     """Evaluate the board using the REWARDS matrix with Numba-compatible loops."""
+    
     if state == STATE_BLACK_WON:
         return np.float64(np.inf) if my_turn == STATE_BLACK_TURN else np.float64(-np.inf)
     if state == STATE_WHITE_WON:
