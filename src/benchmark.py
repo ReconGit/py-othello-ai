@@ -6,9 +6,9 @@ from core.mcts import mcts_move
 from colorama import Fore, Style
 from typing import Callable
 
-GAMES_COUNT = 10
-MINIMAX_DEPTH = 1
-MCTS_SIMULATIONS = 10
+GAMES_COUNT = 20
+MINIMAX_DEPTH = 2
+MCTS_SIMULATIONS = 20
 
 
 def run_benchmarks() -> None:
